@@ -210,8 +210,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -230,16 +229,23 @@ jobs:
           merge-multiple: true
           path: content/posts/${{ needs.collect.outputs.date }}/
 
+      - uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
+        id: app-token
+        with:
+          app-id: ${{ vars.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
       - uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
         id: create-pr
         with:
-          token: ${{ github.token }}
+          token: ${{ steps.app-token.outputs.token }}
           sign-commits: true
           title: "Posts: ${{ needs.collect.outputs.date }}"
           branch: "posts/${{ needs.collect.outputs.date }}"
       - name: Merge PR
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PR_NUMBER: ${{ steps.create-pr.outputs.pull-request-number }}
         run: |
           gh pr merge "${PR_NUMBER}" --auto --squash --repo "${GITHUB_REPOSITORY}"
