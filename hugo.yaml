@@ -9,5 +9,7 @@ params:
     Content: Hoge Fuga # TODO
 
   socialIcons:
+    - name: "rss"
+      url: "index.xml"
     - name: "github"
       url: "https://github.com/koki-develop/techclip"
