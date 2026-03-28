@@ -1,7 +1,7 @@
 ---
 name: collect-news
 description: "Collect and organize tech news for a specific date (JST) by category (AI, Security, Cloud, Programming, OSS, etc.). Use this skill when the user wants to check tech news, asks 'what happened in tech today/yesterday', wants a news roundup, or mentions collecting/gathering tech news for a date. Also trigger when the user says things like 'today's tech news', 'news from March 10', or 'latest tech updates'. Results are saved as individual topic files under ./topics/<yyyy>/<mm>/<dd>/<slug>.md."
-allowed-tools: Agent, WebFetch, WebSearch, Read, Glob, Write, Edit, Bash
+allowed-tools: Agent, WebFetch, WebSearch, Read, Glob, Grep, Write, Edit, Bash
 ---
 
 # Collect News
@@ -25,19 +25,7 @@ Resolve relative dates using JST (Asia/Tokyo). If no date is given, default to t
 5. **OSS / Dev Tools** — Open source project releases, developer tools, IDE updates, CI/CD, package managers
 6. **Other** — Hardware, industry acquisitions, notable tech business news, events
 
-## Collection Process (4 phases)
-
-### Phase 0: Check Existing Topics
-
-Before searching for new news, scan the `topics/` directory for recently collected topics to avoid duplication. Topics covering the same event or story that were already collected on a previous day should not appear again.
-
-1. **Determine the scan range.** Look back 7 days from the target date. For target date 2026-03-13, scan `topics/2026/03/07/` through `topics/2026/03/13/`.
-
-2. **Read existing topic files.** Use Glob to find all `./topics/YYYY/MM/DD/*.md` files within the scan range, then Read each file. Extract:
-   - The topic headline (the `# ...` line)
-   - All article URLs listed in the file
-
-3. **Build an exclusion list.** Compile the collected headlines and URLs into a list. This list will be used in Phase 2 for deduplication.
+## Collection Process (3 phases)
 
 ### Phase 1: Category-based Parallel Search
 
@@ -120,11 +108,11 @@ After all 6 agents return, consolidate their results into topics:
 
 4. **Deduplicate.** Each topic appears only once in the output.
 
-5. **Exclude already-collected topics.** Compare each candidate topic against the exclusion list from Phase 0. For each candidate, check both conditions:
+5. **Exclude already-collected topics.** Check each candidate topic against recently collected topics (past 7 days) in the `topics/` directory. For each candidate, check both conditions:
 
-   **URL check (mandatory, mechanical):** Use Grep to search the existing topic files for each candidate article URL. If any URL from a candidate topic already appears in any existing topic file, the topic is a duplicate. This is a string-match check — do not rely on memory, actually run Grep against `topics/` for each URL.
+   **URL check (mandatory, mechanical):** Use Grep to search `topics/` for each candidate article URL. If any URL from a candidate topic already appears in any existing topic file, the topic is a duplicate. This is a string-match check — do not rely on memory, actually run Grep for each URL.
 
-   **Headline check (semantic):** If URLs don't match, also check whether the candidate's headline describes the same event/announcement as an existing topic headline. Use semantic similarity — e.g., "OpenAI releases GPT-5" and "GPT-5が正式リリース" are the same story.
+   **Headline check (semantic):** If URLs don't match, use Glob to find topic files from the past 7 days (`topics/YYYY/MM/DD/*.md`), Read their headlines (the `# ...` line), and check whether any existing headline describes the same event/announcement as the candidate. Use semantic similarity — e.g., "OpenAI releases GPT-5" and "GPT-5が正式リリース" are the same story.
 
    Remove duplicates from the candidate list. A topic is only considered "new" if it covers a genuinely different development — not just the same story reworded or with minor additional details. The bar for keeping a "follow-up" should be high: a new official announcement, a materially different consequence, or a major escalation. Simply having a slightly different summary of the same event does not qualify.
 
