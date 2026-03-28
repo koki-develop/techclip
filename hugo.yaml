@@ -1,5 +1,6 @@
 baseURL: https://koki-develop.github.io/techclip/
 locale: ja-JP
+timeZone: Asia/Tokyo
 title: Tech Clip
 theme: ["PaperMod"]
 
