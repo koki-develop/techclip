@@ -1,4 +1,4 @@
-baseURL: https://example.org/
-locale: en-us
-title: My New Hugo Project
+baseURL: https://koki-develop.github.io/tech-clip/
+locale: ja-JP
+title: Tech Clip
 theme: ["PaperMod"]
