@@ -1,5 +1,5 @@
 ---
-date: "2026-03-29"
+date: "2026-03-28"
 title: "Amazonが家庭向けヒューマノイドロボット企業Fauna Roboticsを買収、消費者向けロボット市場に本格参入"
 description: "Amazonがニューヨーク拠点のスタートアップFauna Roboticsを買収し、子ども大の家庭用ヒューマノイドロボット「Sprout」の技術を取り込んで消費者向けロボット事業を拡大する。"
 tags:

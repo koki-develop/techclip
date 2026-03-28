@@ -1,5 +1,5 @@
 ---
-date: "2026-03-29"
+date: "2026-03-28"
 title: "Apple、Mac Proを正式に販売終了 ― 約20年の歴史に幕、後継モデルの計画もなし"
 description: "Appleが2023年のM2 Ultra搭載モデルを最後にMac Proの販売を終了し、今後の新モデル計画もないことを明らかにした。"
 tags:

@@ -1,5 +1,5 @@
 ---
-date: "2026-03-29"
+date: "2026-03-28"
 title: "Google、Gemini 3 Deep Thinkを大幅強化 ― 並列推論で数学・科学の難問に金メダル級の性能"
 description: "GoogleがGemini 3.1 Proベースの高度推論モード「Gemini 3 Deep Think」をアップグレードし、数学・科学オリンピックで金メダル水準、競技プログラミングでLegendary Grandmaster水準の性能を達成した。"
 tags:

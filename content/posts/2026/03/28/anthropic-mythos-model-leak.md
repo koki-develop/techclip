@@ -1,5 +1,5 @@
 ---
-date: "2026-03-29"
+date: "2026-03-28"
 title: "Anthropicの未発表AIモデル「Claude Mythos」、CMS設定ミスによるデータ漏洩で存在が判明"
 description: "AnthropicのCMSの設定ミスにより、開発中の次世代AIモデル「Claude Mythos」の内部文書が公開状態となり、同社史上最も強力なモデルの存在が明らかになった。"
 tags:

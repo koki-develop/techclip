@@ -1,5 +1,5 @@
 ---
-date: "2026-03-29"
+date: "2026-03-28"
 title: "TeamPCPグループがTrivyとPyPIパッケージを標的にしたサプライチェーン攻撃、Microsoftが検出・防御ガイダンスを公開"
 description: "TeamPCP（DeadCatx3）グループがAqua SecurityのTrivyおよびPyPIのtelnyxパッケージを侵害し、CI/CDシークレットの窃取やステガノグラフィを用いた認証情報収集マルウェアを展開した。"
 tags:

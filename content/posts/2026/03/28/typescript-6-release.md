@@ -1,5 +1,5 @@
 ---
-date: "2026-03-29"
+date: "2026-03-28"
 title: "TypeScript 6.0正式リリース、JavaScriptベース最終版としてGo製コンパイラへの移行準備が本格化"
 description: "MicrosoftがTypeScript 6.0を正式リリースし、JavaScriptベースの最後のメジャーバージョンとして多数のデフォルト変更・非推奨化を導入、Go実装のTypeScript 7.0への移行を促している。"
 tags:
