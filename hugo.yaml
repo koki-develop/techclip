@@ -16,8 +16,8 @@ menu:
 
 params:
   homeInfoParams:
-    Title: Foo Bar # TODO
-    Content: Hoge Fuga # TODO
+    Title: ようこそ 👋
+    Content: 様々なテックニュースの要約をお届けするブログです。
 
   socialIcons:
     - name: "rss"
