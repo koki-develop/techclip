@@ -37,7 +37,7 @@ Before searching for new news, scan the `topics/` directory for recently collect
    - The topic headline (the `# ...` line)
    - All article URLs listed in the file
 
-3. **Build an exclusion list.** Compile the collected headlines and URLs into a list. This list will be passed to Phase 2 for deduplication.
+3. **Build an exclusion list.** Compile the collected headlines and URLs into a list. This list will be used in Phase 2 for deduplication.
 
 ### Phase 1: Category-based Parallel Search
 
@@ -120,11 +120,13 @@ After all 6 agents return, consolidate their results into topics:
 
 4. **Deduplicate.** Each topic appears only once in the output.
 
-5. **Exclude already-collected topics.** Compare each candidate topic against the exclusion list from Phase 0. A topic is considered a duplicate if:
-   - Any of its article URLs match a URL in an existing topic file, OR
-   - Its headline describes the same event/announcement as an existing topic headline (use semantic similarity — exact string matching is not enough; e.g., "OpenAI releases GPT-5" and "GPT-5が正式リリース" are the same story)
+5. **Exclude already-collected topics.** Compare each candidate topic against the exclusion list from Phase 0. For each candidate, check both conditions:
 
-   Remove duplicates from the candidate list. If a topic is mostly the same story but has a significant new development (e.g., a follow-up announcement, new details, or escalation), it is NOT a duplicate — keep it, but make the headline reflect the new angle.
+   **URL check (mandatory, mechanical):** Use Grep to search the existing topic files for each candidate article URL. If any URL from a candidate topic already appears in any existing topic file, the topic is a duplicate. This is a string-match check — do not rely on memory, actually run Grep against `topics/` for each URL.
+
+   **Headline check (semantic):** If URLs don't match, also check whether the candidate's headline describes the same event/announcement as an existing topic headline. Use semantic similarity — e.g., "OpenAI releases GPT-5" and "GPT-5が正式リリース" are the same story.
+
+   Remove duplicates from the candidate list. A topic is only considered "new" if it covers a genuinely different development — not just the same story reworded or with minor additional details. The bar for keeping a "follow-up" should be high: a new official announcement, a materially different consequence, or a major escalation. Simply having a slightly different summary of the same event does not qualify.
 
 6. **Prioritize and trim.** Select the top 10 topics overall, aiming for roughly 1-3 per category but not forcing equal distribution. Prioritize by:
    - Impact and significance to the tech community
