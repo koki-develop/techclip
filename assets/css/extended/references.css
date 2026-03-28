@@ -1,0 +1,103 @@
+.post-references {
+  margin-top: 2.5rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--code-bg);
+  border-radius: var(--radius);
+}
+
+.post-references-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--secondary);
+}
+
+.post-references-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.post-references-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: ref;
+}
+
+.post-references-list li {
+  counter-increment: ref;
+  position: relative;
+}
+
+.post-references-list li + li {
+  margin-top: 0.25rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.post-references-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  margin: 0 -0.5rem;
+  border-radius: calc(var(--radius) / 2);
+  text-decoration: none;
+  color: var(--primary);
+  transition: background 0.15s ease;
+}
+
+.post-references-list a::before {
+  content: counter(ref);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4em;
+  height: 1.4em;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+
+.post-references-list a:hover {
+  background: var(--border);
+}
+
+.post-references-domain {
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.post-references-path {
+  font-size: 0.75rem;
+  color: var(--secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.post-references-external {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: var(--secondary);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  align-self: center;
+}
+
+.post-references-list a:hover .post-references-external {
+  opacity: 1;
+}
