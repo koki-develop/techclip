@@ -1,0 +1,245 @@
+name: Create Posts
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+      timezone: Asia/Tokyo
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Target date (YYYY/MM/DD, JST)"
+        required: false
+
+jobs:
+  collect:
+    name: Collect
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: read
+    outputs:
+      date: ${{ steps.date.outputs.date }}
+      topic-files: ${{ steps.topic-files.outputs.files }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
+
+      - name: Set date
+        id: date
+        env:
+          INPUT_DATE: ${{ inputs.date }}
+        run: |
+          if [ -n "$INPUT_DATE" ]; then
+            echo "date=$INPUT_DATE" >> "$GITHUB_OUTPUT"
+          else
+            echo "date=$(TZ=Asia/Tokyo date +%Y/%m/%d)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Collect news
+        env:
+          TARGET_DATE: ${{ steps.date.outputs.date }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          claude --print "/collect-news ${TARGET_DATE}" \
+            --model 'sonnet' \
+            --settings='{ "language": "Japanese" }' \
+            --allowed-tools "Agent,WebFetch,WebSearch,Read,Glob,Write,Edit,Bash" \
+            --permission-mode acceptEdits \
+            --output-format=stream-json \
+            --verbose
+
+      - name: List topic files
+        id: topic-files
+        env:
+          TARGET_DATE: ${{ steps.date.outputs.date }}
+        run: |
+          dir="./topics/${TARGET_DATE}"
+          if [ ! -d "$dir" ]; then
+            echo "::error::Topics directory not found: $dir"
+            exit 1
+          fi
+          shopt -s nullglob
+          md_files=("$dir"/*.md)
+          if [ ${#md_files[@]} -eq 0 ]; then
+            echo "::error::No .md files found in $dir"
+            exit 1
+          fi
+          files=$(printf '%s\n' "${md_files[@]}" | jq -R -s -c 'split("\n") | map(select(. != ""))')
+          echo "files=${files}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload topics
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: topics
+          if-no-files-found: error
+          path: topics/
+
+  summarize:
+    name: Summarize
+    needs: [collect]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    strategy:
+      max-parallel: 10
+      matrix:
+        file: ${{ fromJSON(needs.collect.outputs.topic-files) }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
+
+      - name: Download topics
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: topics
+          path: topics/
+
+      - name: Extract slug
+        id: slug
+        env:
+          FILE: ${{ matrix.file }}
+        run: |
+          slug=$(basename "${FILE}" .md)
+          echo "slug=${slug}" >> "$GITHUB_OUTPUT"
+
+      - name: Summarize topic
+        env:
+          FILE: ${{ matrix.file }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          claude --print "/summarize-news ${FILE}" \
+            --model 'opus[1m]' \
+            --settings='{ "language": "Japanese" }' \
+            --allowed-tools "Agent,WebFetch,WebSearch,Read,Glob,Write,Edit,Bash" \
+            --permission-mode acceptEdits \
+            --output-format=stream-json \
+            --verbose
+
+      - name: Derive post path
+        id: post
+        env:
+          TARGET_DATE: ${{ needs.collect.outputs.date }}
+          SLUG: ${{ steps.slug.outputs.slug }}
+        run: |
+          echo "file=./content/posts/${TARGET_DATE}/${SLUG}.md" >> "$GITHUB_OUTPUT"
+
+      - name: Upload post
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: post-${{ steps.slug.outputs.slug }}
+          if-no-files-found: error
+          path: ${{ steps.post.outputs.file }}
+
+  review:
+    name: Review
+    needs: [collect, summarize]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    strategy:
+      max-parallel: 10
+      matrix:
+        file: ${{ fromJSON(needs.collect.outputs.topic-files) }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
+
+      - name: Extract slug
+        id: slug
+        env:
+          FILE: ${{ matrix.file }}
+        run: |
+          slug=$(basename "${FILE}" .md)
+          echo "slug=${slug}" >> "$GITHUB_OUTPUT"
+
+      - name: Download post
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: post-${{ steps.slug.outputs.slug }}
+          path: content/posts/${{ needs.collect.outputs.date }}/
+
+      - name: Derive post path
+        id: post
+        env:
+          TARGET_DATE: ${{ needs.collect.outputs.date }}
+          SLUG: ${{ steps.slug.outputs.slug }}
+        run: |
+          echo "file=./content/posts/${TARGET_DATE}/${SLUG}.md" >> "$GITHUB_OUTPUT"
+
+      - name: Review post
+        env:
+          FILE: ${{ steps.post.outputs.file }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          claude --print "/review-post ${FILE}" \
+            --model 'opus[1m]' \
+            --settings='{ "language": "Japanese" }' \
+            --allowed-tools "Agent,WebFetch,WebSearch,Read,Glob,Write,Edit,Bash" \
+            --permission-mode acceptEdits \
+            --output-format=stream-json \
+            --verbose
+
+      - name: Upload reviewed post
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: reviewed-${{ steps.slug.outputs.slug }}
+          if-no-files-found: error
+          path: ${{ steps.post.outputs.file }}
+
+  create-pr:
+    name: Create PR
+    needs: [collect, review]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Download topics
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: topics
+          path: topics/
+
+      - name: Download reviewed posts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: reviewed-*
+          merge-multiple: true
+          path: content/posts/${{ needs.collect.outputs.date }}/
+
+      - uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
+        id: create-pr
+        with:
+          token: ${{ github.token }}
+          sign-commits: true
+          title: "Posts: ${{ needs.collect.outputs.date }}"
+          branch: "posts/${{ needs.collect.outputs.date }}"
+      - name: Merge PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ steps.create-pr.outputs.pull-request-number }}
+        run: |
+          gh pr merge "${PR_NUMBER}" --auto --squash --repo "${GITHUB_REPOSITORY}"
