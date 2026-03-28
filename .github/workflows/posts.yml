@@ -44,7 +44,7 @@ jobs:
           if [ -n "$INPUT_DATE" ]; then
             echo "date=$INPUT_DATE" >> "$GITHUB_OUTPUT"
           else
-            echo "date=$(TZ=Asia/Tokyo date +%Y/%m/%d)" >> "$GITHUB_OUTPUT"
+            echo "date=$(TZ=Asia/Tokyo date -d 'yesterday' +%Y/%m/%d)" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Collect news
