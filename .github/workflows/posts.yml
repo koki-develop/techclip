@@ -14,6 +14,10 @@ on:
   schedule:
     - cron: "0 2 * * *"
       timezone: Asia/Tokyo
+    - cron: "0 10 * * *"
+      timezone: Asia/Tokyo
+    - cron: "0 18 * * *"
+      timezone: Asia/Tokyo
   workflow_dispatch:
     inputs:
       date:
@@ -44,7 +48,7 @@ jobs:
           if [ -n "$INPUT_DATE" ]; then
             echo "date=$INPUT_DATE" >> "$GITHUB_OUTPUT"
           else
-            echo "date=$(TZ=Asia/Tokyo date -d 'yesterday' +%Y/%m/%d)" >> "$GITHUB_OUTPUT"
+            echo "date=$(TZ=Asia/Tokyo date +%Y/%m/%d)" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Collect news
@@ -243,6 +247,7 @@ jobs:
           sign-commits: true
           title: "Posts: ${{ needs.collect.outputs.date }}"
           branch: "posts/${{ needs.collect.outputs.date }}"
+          branch-suffix: short-commit-hash
       - name: Merge PR
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
