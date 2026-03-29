@@ -253,4 +253,4 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PR_NUMBER: ${{ steps.create-pr.outputs.pull-request-number }}
         run: |
-          gh pr merge "${PR_NUMBER}" --auto --squash --repo "${GITHUB_REPOSITORY}"
+          gh pr merge "${PR_NUMBER}" --squash --repo "${GITHUB_REPOSITORY}"
