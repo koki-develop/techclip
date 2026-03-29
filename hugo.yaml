@@ -17,8 +17,8 @@ menu:
 
 params:
   homeInfoParams:
-    Title: ようこそ 👋
-    Content: 様々なテックニュースの要約をお届けするブログです。
+    Title: Foo Bar
+    Content: Claude Code に技術ニュースを収集・要約させてるやつ
 
   socialIcons:
     - name: "rss"
