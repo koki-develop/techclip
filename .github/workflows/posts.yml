@@ -51,6 +51,17 @@ jobs:
             echo "date=$(TZ=Asia/Tokyo date +%Y/%m/%d)" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Snapshot existing topics
+        env:
+          TARGET_DATE: ${{ steps.date.outputs.date }}
+        run: |
+          dir="./topics/${TARGET_DATE}"
+          if [ -d "$dir" ]; then
+            ls "$dir"/*.md 2>/dev/null | sort > /tmp/topics-before.txt
+          else
+            touch /tmp/topics-before.txt
+          fi
+
       - name: Collect news
         env:
           TARGET_DATE: ${{ steps.date.outputs.date }}
@@ -74,13 +85,13 @@ jobs:
             echo "::error::Topics directory not found: $dir"
             exit 1
           fi
-          shopt -s nullglob
-          md_files=("$dir"/*.md)
-          if [ ${#md_files[@]} -eq 0 ]; then
-            echo "::error::No .md files found in $dir"
+          ls "$dir"/*.md 2>/dev/null | sort > /tmp/topics-after.txt
+          new_files=$(comm -13 /tmp/topics-before.txt /tmp/topics-after.txt)
+          if [ -z "$new_files" ]; then
+            echo "::error::No new topic files created"
             exit 1
           fi
-          files=$(printf '%s\n' "${md_files[@]}" | jq -R -s -c 'split("\n") | map(select(. != ""))')
+          files=$(echo "$new_files" | jq -R -s -c 'split("\n") | map(select(. != ""))')
           echo "files=${files}" >> "$GITHUB_OUTPUT"
 
       - name: Upload topics
