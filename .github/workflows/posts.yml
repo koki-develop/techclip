@@ -33,6 +33,7 @@ jobs:
       contents: read
     outputs:
       date: ${{ steps.date.outputs.date }}
+      datetime: ${{ steps.date.outputs.datetime }}
       topic-files: ${{ steps.topic-files.outputs.files }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -47,8 +48,11 @@ jobs:
         run: |
           if [ -n "$INPUT_DATE" ]; then
             echo "date=$INPUT_DATE" >> "$GITHUB_OUTPUT"
+            formatted=$(echo "$INPUT_DATE" | tr '/' '-')
+            echo "datetime=${formatted}T00:00:00+09:00" >> "$GITHUB_OUTPUT"
           else
             echo "date=$(TZ=Asia/Tokyo date +%Y/%m/%d)" >> "$GITHUB_OUTPUT"
+            echo "datetime=$(TZ=Asia/Tokyo date +%Y-%m-%dT%H:%M:%S+09:00)" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Snapshot existing topics
@@ -135,9 +139,10 @@ jobs:
       - name: Summarize topic
         env:
           FILE: ${{ matrix.file }}
+          DATETIME: ${{ needs.collect.outputs.datetime }}
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: |
-          claude --print "/summarize-news ${FILE}" \
+          claude --print "/summarize-news ${FILE} ${DATETIME}" \
             --model 'sonnet' \
             --settings='{ "language": "Japanese" }' \
             --allowed-tools "Agent,WebFetch,WebSearch,Read,Glob,Write,Edit,Bash" \

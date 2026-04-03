@@ -1,5 +1,5 @@
 ---
-date: "2026-04-03"
+date: "2026-04-03T09:00:00+09:00"
 title: "Anthropic、バイオ研究特化AIスタートアップCoefficient Bioを4億ドル超の株式取引で買収"
 description: "AnthropicがステルススタートアップCoefficient Bioを約4億ドルの株式取引で買収し、医療・ライフサイエンス分野へのAI展開を本格化させる。"
 tags:

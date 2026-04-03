@@ -10,7 +10,7 @@ Read the full content of each article from a single previously collected news to
 
 ## Input
 
-The user specifies a topic file path (e.g., `./topics/<yyyy>/<mm>/<dd>/<slug>.md`). If ambiguous, ask the user which topic file to summarize.
+The user specifies a topic file path (e.g., `./topics/<yyyy>/<mm>/<dd>/<slug>.md`) and a datetime string in ISO 8601 format (e.g., `2026-04-03T18:00:00+09:00`). If ambiguous, ask the user which topic file to summarize.
 
 The topic file contains:
 - A topic headline in Japanese (h1)
@@ -30,6 +30,8 @@ Read the specified topic file and extract:
 Also extract the date components and slug from the file path. For `./topics/<yyyy>/<mm>/<dd>/<slug>.md`:
 - Date: `<yyyy>/<mm>/<dd>`
 - Slug: `<slug>`
+
+Use the datetime string (second argument) as the `date` field value in the frontmatter (e.g., `date: "2026-04-03T18:00:00+09:00"`).
 
 ### Step 2: Fetch and Analyze Articles
 
@@ -68,7 +70,7 @@ Use this exact format:
 
 ```markdown
 ---
-date: "[YYYY-MM-DD]"
+date: "[YYYY-MM-DDTHH:MM:SS+09:00]"
 title: "[記事の内容に基づいて考えた適切なタイトル]"
 description: "[1文でトピックの内容を説明]"
 tags:
@@ -92,7 +94,7 @@ references:
 
 ```markdown
 ---
-date: "2026-01-15"
+date: "2026-01-15T10:00:00+09:00"
 title: "Exampleプロジェクト vX.Y がリリース、新機能Zで処理速度が大幅向上"
 description: "ExampleプロジェクトがバージョンX.Yを正式リリースし、新機能Zによる処理速度の改善を発表した。"
 tags:

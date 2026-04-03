@@ -25,7 +25,7 @@ Tool versions are managed by mise (see `mise.toml`): Hugo 0.159.1.
 
 ### Automated News Pipeline
 
-The CI workflow (`.github/workflows/posts.yml`) runs daily at 02:00 JST and executes a 4-stage pipeline using Claude Code skills:
+The CI workflow (`.github/workflows/posts.yml`) runs daily at 02:00, 10:00, 18:00 JST and executes a 4-stage pipeline using Claude Code skills:
 
 1. **Collect** (`/collect-news`) — Searches for tech news across 6 categories (AI, Security, Cloud, Programming, OSS, Other), deduplicates against the last 7 days, and saves topic files
 2. **Summarize** (`/summarize-news`) — Reads full articles for each topic and writes a detailed Hugo post (runs in parallel per topic)
@@ -40,7 +40,7 @@ The CI workflow (`.github/workflows/posts.yml`) runs daily at 02:00 JST and exec
 ### Post Frontmatter
 
 Posts use these frontmatter fields:
-- `date`: Publication date as `"YYYY-MM-DD"`
+- `date`: Publication datetime as `"YYYY-MM-DDTHH:MM:SS+09:00"`
 - `title`: Japanese article title
 - `description`: One-sentence Japanese summary
 - `tags`: Array of category tags (AI, Security, Cloud, Programming Languages, OSS, Other)
