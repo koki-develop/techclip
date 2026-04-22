@@ -11,11 +11,11 @@ concurrency:
   cancel-in-progress: false
 
 on:
-  schedule:
-    - cron: "0 6 * * *"
-      timezone: Asia/Tokyo
-    - cron: "0 18 * * *"
-      timezone: Asia/Tokyo
+  # schedule:
+  #   - cron: "0 6 * * *"
+  #     timezone: Asia/Tokyo
+  #   - cron: "0 18 * * *"
+  #     timezone: Asia/Tokyo
   workflow_dispatch:
     inputs:
       date:
