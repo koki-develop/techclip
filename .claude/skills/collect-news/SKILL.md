@@ -116,7 +116,7 @@ After all 6 agents return, consolidate their results into topics:
 
    Remove duplicates from the candidate list. A topic is only considered "new" if it covers a genuinely different development — not just the same story reworded or with minor additional details. The bar for keeping a "follow-up" should be high: a new official announcement, a materially different consequence, or a major escalation. Simply having a slightly different summary of the same event does not qualify.
 
-6. **Prioritize and trim.** Select the top 10 topics overall, aiming for roughly 1-3 per category but not forcing equal distribution. Prioritize by:
+6. **Prioritize and trim.** Select the top 5 topics overall, aiming for roughly 1-3 per category but not forcing equal distribution. Prioritize by:
    - Impact and significance to the tech community
    - Novelty (new releases/announcements over opinion pieces)
    - Breadth across categories (avoid filling the list with one dominant category)

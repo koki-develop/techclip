@@ -22,9 +22,9 @@ If the user hasn't specified a file, ask them.
 
 Steps 2, 3, and 4 run inside an iteration loop. Each iteration is a complete, independent review cycle.
 
-**Termination condition**: Always run exactly **3 cycles** — no more, no less.
+**Termination condition**: Always run exactly **2 cycles** — no more, no less.
 
-**Early termination is strictly prohibited.** Do not stop the loop before 3 cycles are complete. Cost, time, token usage, or a subjective judgment that "the review has been thorough enough" are never valid reasons to skip remaining cycles. This is non-negotiable.
+**Early termination is strictly prohibited.** Do not stop the loop before 2 cycles are complete. Cost, time, token usage, or a subjective judgment that "the review has been thorough enough" are never valid reasons to skip remaining cycles. This is non-negotiable.
 
 **Cycle independence is absolute**: Each cycle's review subagent receives NO information about previous cycles — no prior findings, no list of previously fixed text, no "focus on these areas." Every cycle is a fresh, unbiased review of the post file in its current state (which may include fixes applied by earlier cycles). The parent agent tracks cycle metadata (fix counts) purely for loop control and reporting — this metadata is never passed to the subagent.
 
@@ -225,7 +225,7 @@ For each confirmed finding with final score >= 7:
 
 After applying fixes, record how many fixes were applied in this cycle.
 
-- If this is cycle **3** → **stop** (all cycles complete).
+- If this is cycle **2** → **stop** (all cycles complete).
 - Otherwise → **go back to Step 2** for the next cycle. The next cycle's subagent receives the same prompt as always, with absolutely no knowledge of what happened in previous cycles.
 
 #### End of Iteration Loop
@@ -233,7 +233,7 @@ After applying fixes, record how many fixes were applied in this cycle.
 ### Step 5: Report to User
 
 Report with:
-- **Iteration summary**: How many fixes were applied per cycle (cycle 1, 2, 3)
+- **Iteration summary**: How many fixes were applied per cycle (cycle 1, 2)
 - Number of source articles reviewed and how many could not be fetched
 - **Applied fixes** (final score >= 7): Issues that were automatically corrected, showing the before/after, verification reasoning, and which cycle found them
 - **Overturned findings**: Total count of findings that the subagent flagged but the parent dismissed during verification, with 2-3 representative examples to illustrate the types of false positives caught
