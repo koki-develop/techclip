@@ -1,0 +1,26 @@
+---
+date: "2026-08-09T08:05:42+09:00"
+title: "AtlassianのAIエージェント「Rovo」に二つの深刻な脆弱性、JiraやConfluenceのデータが外部流出の恐れ"
+description: "Atlassianのアジャイル管理AIアシスタント「Rovo」で間接プロンプトインジェクションとURLパラメータ悪用による二つの独立した脆弱性が発見され、JiraやConfluenceの機密データが攻撃者に流出しうることが明らかになった。"
+tags:
+  - Security
+  - AI
+references:
+  - "https://thehackernews.com/2026/08/atlassian-rovo-can-be-tricked-into.html"
+  - "https://www.promptarmor.com/resources/atlassian-rovo-exfiltrates-data"
+  - "https://www.securityweek.com/critical-one-click-vulnerability-in-atlassians-rovo-ai-exposed-enterprise-data/"
+---
+
+## 概要
+
+Atlassianの企業向けAIアシスタント「Rovo」に、JiraやConfluenceなどのデータをユーザーの知らぬ間に外部の攻撃者へ流出させられる脆弱性が、PromptArmorとVaronis Threat Labsという2つのセキュリティ企業によりそれぞれ独立して発見された。Rovoはユーザーが元々アクセス権を持つデータの範囲内で動作するため、テナント全体の権限バイパスではないものの、正規のアクセス権限を悪用する形で機密情報が窃取されうる点が問題視されている。影響はStandard、Premium、Enterpriseの各プランに及び、対象データはJiraのチケットやConfluenceのページにとどまらず、SharePointやOutlook、Slack、Google Workspaceなど連携されたコネクタ経由の情報にも広がる。いずれの脆弱性も現時点でCVE番号は付与されておらず、実際の悪用事例は報告されていない。
+
+## 二つの攻撃手法
+
+Varonis Threat Labsが発見し「RovoBlast」と名付けた脆弱性は、Rovo Chatの内容を事前入力できるURLパラメータ`_rovoChatPrompt_`を悪用するもので、Microsoft Copilotで確認された「Reprompt」攻撃と同種の、パラメータからプロンプトへの注入(P2P injection)に分類される。攻撃者が仕込んだ特殊なリンクを認証済みユーザーが一度クリックするだけで、外部からの指示がユーザーのAIセッションに気づかれずに注入され、Rovoが持つResearchAgent機能を通じてConfluenceのページやJiraチケット、個人情報を含むSharePointコンテンツなどを自動的に取得し、外部サイトへ送信するチェーンが成立する。この脆弱性は2026年8月8日、米ラスベガスで開催されたDEF CON 34にて公表された。
+
+一方、PromptArmorが報告した脆弱性はクリック操作すら不要なゼロクリック型の間接プロンプトインジェクションである。ユーザーがアップロードしたファイルに隠された悪意ある指示が埋め込まれていると、ユーザーがRovoにJiraチケットの整理などを依頼した際、AIがJiraやConfluenceを検索する過程で仕込まれたコードが起動し、取得した機密データを攻撃者が用意したURLに付加して送信してしまう。被害者の画面には通常どおりの検索結果が表示されるため、データが流出していることに気づくのは困難だ。PromptArmorは、RovoのURL取得ツールにはエージェントが動的に生成したURLを開く際の保護機構が存在しないと指摘しており、さらに組織側がウェブ検索機能を無効化していても、検索結果を開くツール自体は無効化されないため攻撃を防げないとしている。
+
+## 対応状況と今後の対策
+
+RovoBlastについてAtlassianは公表前に修正を完了しており、報告した研究者にはバグ報奨金制度Bugcrowdを通じて6,000ドルが支払われた。これに対しPromptArmorが報告した間接プロンプトインジェクションの問題は、2026年5月23日の報告から2ヶ月以上が経過した公表時点でも未解決のままとされる。Atlassianは報告受領から2日後に謝意とケース番号を伝えたものの、その後の追加連絡には応答がなかったという。この種の脆弱性が未修正の間、管理者側の緩和策としてはRovoがアクセスできるアプリやユーザーグループを制限すること、使用していない外部連携を切断すること、アクティビティログを監視することなどが推奨されている。AIエージェントがユーザーに代わって自律的に情報を検索・取得する仕組みは利便性が高い一方、外部から混入した指示を正規の指示と区別できないという構造的な弱点を抱えており、他の企業向けAIアシスタントにも共通するリスクとして注視が必要だ。
