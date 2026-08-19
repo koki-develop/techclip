@@ -70,7 +70,7 @@ jobs:
           claude --print "/collect-news ${TARGET_DATE}" \
             --model 'sonnet' \
             --settings='{ "language": "Japanese" }' \
-            --allowed-tools "Agent,WebFetch,WebSearch,Read,Glob,Write,Edit,Bash" \
+            --allowed-tools "Task,Skill,WebFetch,WebSearch,Read,Glob,Write,Edit,Bash" \
             --permission-mode acceptEdits \
             --output-format=stream-json \
             --verbose
@@ -141,7 +141,7 @@ jobs:
           claude --print "/summarize-news ${FILE} ${DATETIME}" \
             --model 'sonnet' \
             --settings='{ "language": "Japanese" }' \
-            --allowed-tools "Agent,WebFetch,WebSearch,Read,Glob,Write,Edit,Bash" \
+            --allowed-tools "Task,Skill,WebFetch,WebSearch,Read,Glob,Write,Edit,Bash" \
             --permission-mode acceptEdits \
             --output-format=stream-json \
             --verbose
@@ -208,7 +208,7 @@ jobs:
           claude --print "/review-post ${FILE}" \
             --model 'sonnet' \
             --settings='{ "language": "Japanese" }' \
-            --allowed-tools "Agent,WebFetch,WebSearch,Read,Glob,Write,Edit,Bash" \
+            --allowed-tools "Task,Skill,WebFetch,WebSearch,Read,Glob,Write,Edit,Bash" \
             --permission-mode acceptEdits \
             --output-format=stream-json \
             --verbose
