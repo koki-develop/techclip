@@ -25,12 +25,14 @@ Tool versions are managed by mise (see `mise.toml`): Hugo 0.159.1.
 
 ### Automated News Pipeline
 
-The CI workflow (`.github/workflows/posts.yml`) runs daily at 02:00, 10:00, 18:00 JST and executes a 4-stage pipeline using Claude Code skills:
+The CI workflow (`.github/workflows/posts.yml`) runs at 02:00, 08:00, 14:00, 20:00 JST and executes a 4-stage pipeline using Claude Code skills:
 
-1. **Collect** (`/collect-news`) — Searches for tech news across 6 categories (AI, Security, Cloud, Programming, OSS, Other), deduplicates against the last 7 days, and saves topic files
+1. **Collect** (`/collect-news`) — Searches for tech news across 6 categories (AI, Security, Cloud, Programming Languages, OSS, Other), deduplicates against the last 7 days, and saves topic files
 2. **Summarize** (`/summarize-news`) — Reads full articles for each topic and writes a detailed Hugo post (runs in parallel per topic)
-3. **Review** (`/review-post`) — Fact-checks each summary against source articles through iterative review cycles (runs in parallel per topic)
+3. **Review** (`/review-post`) — Fact-checks each post against its source articles through iterative review cycles (runs in parallel per topic)
 4. **Create PR** — Opens and auto-merges a PR with all new posts
+
+Stages 1 and 3 delegate the bulk of their work to subagents defined in `.claude/agents/`: `news-searcher` (source allowlist, date verification, result format) and `fact-checker` (source verification procedure and finding format). Keeping those prompts in agent definitions rather than inline in the skills keeps them out of the parent agent's context.
 
 ### Content Structure
 

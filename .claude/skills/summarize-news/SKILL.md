@@ -1,6 +1,8 @@
 ---
 name: summarize-news
-description: "Summarize a single collected tech news topic in detail by reading full article content. Use this skill after collect-news has been run. Takes a topic file path (./topics/<yyyy>/<mm>/<dd>/<slug>.md) and generates a detailed summary as a Hugo post. Trigger when the user says things like 'summarize this topic', 'read the articles', 'detailed summary', 'summarize the news', '要約して', '詳しく読んで', '記事の内容をまとめて', or any request to dig deeper into a specific collected news topic."
+description: Reads the full articles of one collected topic and writes them up as a detailed Hugo post under content/posts/<yyyy>/<mm>/<dd>/.
+argument-hint: "[topic-file] [datetime]"
+disable-model-invocation: true
 ---
 
 # Summarize News
@@ -9,7 +11,9 @@ Read the full content of every article in a collected topic file (`collect-news`
 
 ## Input
 
-A topic file path (`./topics/<yyyy>/<mm>/<dd>/<slug>.md`) and an ISO 8601 datetime (e.g. `2026-04-03T18:00:00+09:00`) that becomes the frontmatter `date`. If ambiguous, ask which topic file to summarize.
+Topic file and datetime: $ARGUMENTS
+
+A topic file path (`./topics/<yyyy>/<mm>/<dd>/<slug>.md`) and an ISO 8601 datetime (e.g. `2026-04-03T18:00:00+09:00`) that becomes the frontmatter `date`. If the topic file is ambiguous, ask which one to summarize.
 
 ## Process
 
@@ -50,4 +54,4 @@ Exampleプロジェクトは1月15日、バージョンX.Yを正式にリリー�
 新機能Zは従来の処理方式を刷新し、...
 ```
 
-5. **Report** the output file path and any articles that could not be fetched, so the user is aware of gaps.
+5. **Report** the output file path and any articles that could not be fetched.
