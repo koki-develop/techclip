@@ -1,0 +1,23 @@
+---
+date: "2026-08-30T08:09:56+09:00"
+title: "SalesforceとAnthropicが「Claudeforce」始動、ClaudeがCRMの標準推論エンジンに"
+description: "SalesforceとAnthropicが提携を拡大し、ClaudeをSalesforce製品群のデフォルト推論モデルに据えると同時にSalesforceをClaudeのプラグインとして提供する「Claudeforce」を発表した。"
+tags:
+  - AI
+references:
+  - "https://www.salesforce.com/news/press-releases/2026/08/26/salesforce-and-anthropic-announce-claudeforce/"
+---
+
+## 概要
+
+SalesforceとAnthropicは8月26日、両社の提携を大幅に拡大する「Claudeforce」を発表した。柱は2つある。1つはClaudeをSalesforceのAtlas Reasoning Engineの推論モデルとして組み込み、Agentforce Vibes、Agentforce Coworker、Agent Builder、そしてSlackbotのデフォルトモデルとして採用すること。もう1つは逆にSalesforceをAnthropicのClaude CoWork向けプラグイン「Salesforce in Claude」として提供し、商談準備・案件の健全性レビュー・パイプライン分析など37の事前構築セールススキルを通じて、営業担当者がSalesforceの画面を一切開かずに生きたCRMデータを照会・更新・操作できるようにすることだ。前者はすでに提供が始まっており、後者は一部のパイロット顧客向けに展開中で、9月にはオープンベータへ移行する予定。
+
+## 仕組みと権限設計
+
+Salesforce in Claudeの技術的な仕組みはシンプルだ。ClaudeはSalesforceのMCPサーバーに対して指示を実行し、タスクに応じた既存のスキル定義を読み取って動作する。アクセス権限は既存のSalesforceユーザー権限をそのまま継承する設計で、Salesforceのアプリケーション担当社長Patrick Stokes氏は「そのレコードを所有していない、閲覧権限がないなら、MCPサーバーもそれを閲覧できない」と述べ、ガバナンスを保ったままAIに業務を委譲できる点を強調した。管理者による設定は一度だけで、認証と権限管理は一元化される。デモでは、営業担当者が通常なら「Salesforce内で1万回クリック」する朝の案件確認作業を、Claudeが約30秒で完了させる様子が示された。
+
+## 提携の背景と業界へのインパクト
+
+今回の発表は、2026年6月に報じられたAnthropicへの約50億ドル相当の出資、Slackbotのデフォルトモデル化(社内利用率83%、年間810万時間の生産性向上と主張)など、両社の関係強化の延長線上にある。Salesforce会長兼CEOのMarc Benioff氏は「Claudeの卓越した推論と、あらゆる企業が運用する信頼できるデータを融合させることで、考え、推論し、行動する動的インターフェースを実現する」とコメント。Anthropic CEOのDario Amodei氏も、企業がSalesforce上で数十年かけて蓄積した顧客情報や業務コンテキストをClaudeに直接指示できるようになる意義を語った。料金体系は、顧客がAnthropicの推論利用料を別契約で支払い、Salesforce側にはAPIコール数に基づく従量課金(headless consumption pricing)で支払う二重請求構造となっており、Stokes氏はこれを「シート課金から従量課金への業界全体の移行」の一環と位置づけた。
+
+一方で、この提携は2025年10月にSalesforceがOpenAIとAnthropicの両方をAgentforceおよびChatGPTに統合してモデルへの依存を分散させていた姿勢からの転換でもある。特定の推論モデルへの深い依存はベンダーロックインのリスクを伴い、インターフェースの価値がコモディティ化すれば価格決定力がモデル提供者側(Anthropic)に移る可能性も指摘されている。Salesforceは27年かけて築いたデータ・メタデータ・ワークフローこそが自社の本質的な強みであるとし、インターフェース層を明け渡す代わりにデータ基盤としての地位を守る賭けに出た形だ。Salesforceは2026年内にサービス・マーケティング・コマース領域向けの追加スキルを順次投入する計画で、エンタープライズソフトウェアの利用体験がAIエージェント経由へと移行する流れを象徴する動きとして注目されている。
