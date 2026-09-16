@@ -1,0 +1,28 @@
+---
+date: "2026-09-17T08:10:56+09:00"
+title: "Envoy AI GatewayがAgent Routerへ改名、Linux FoundationのAAIF入りでBloombergら11社が採用"
+description: "BloombergとTetrateが開発したAIゲートウェイ「Envoy AI Gateway」がAgent Routerに改称し、Linux Foundation傘下のAgentic AI Foundation独立プロジェクトへ移行した。"
+tags:
+  - OSS
+  - AI
+references:
+  - "https://gihyo.jp/article/2026/09/agent-router"
+---
+
+## 概要
+
+Linux Foundation傘下のAgentic AI Foundation(AAIF)は9月9日、オープンソースのAIゲートウェイ「Agent Router」を独立プロジェクトとして迎え入れると発表した。BloombergとTetrateが共同開発してきた本プロジェクトは、これまでCNCFのEnvoyプロキシのサブプロジェクト「Envoy AI Gateway」として提供されてきたが、今回の移行に合わせてAgent Routerへとリブランドされた。発表時点でBloomberg、Tetrate、Tencent Cloud、Nutanix、LINEヤフー、National Research Platformなど11組織が採用を表明しており、開発には21組織が貢献。メンテナー9席はBloomberg、Nutanix、AMD、Tetrate、Netflixの5社が分担している。
+
+## Agent Routerが解決する課題と仕組み
+
+開発の発端は2024年、Bloombergのエンジニアが直面した課題にある。OpenAI、Anthropic、Googleなど各モデル提供元はリクエスト形式や認証方式がそれぞれ異なり、AIエージェントを複数のモデルに接続する際の実装負荷が大きかった。Agent RouterはOpenAI互換APIのリクエストを各提供元に合う形式へ自動変換し、APIキーなどの認証情報も一元管理することで、エージェント側はモデル名を変更するだけで接続先を切り替えられるようにする。フェイルオーバー機能も備える。
+
+外部ツール接続についてはModel Context Protocol(MCP)に対応し、複数のMCPサーバーから選んだツールを統一カタログにまとめて提供する。呼び出し元ごとに利用可能なツールを制限でき、アクセス制御はツール一覧取得時と実際の呼び出し時の両段階で実施される。さらにリクエスト件数だけでなく、モデルが処理するトークン数による使用量制限も可能で、呼び出し状況はログとトレースに記録される。基盤にはLyftが開発しCNCF傘下で維持されているプロキシソフトウェア「Envoy」を用い、管理者が指定した接続先や認証情報をEnvoy向け設定に変換して通信を処理させる仕組みだ。
+
+## リリース実績とAAIF移行の意義
+
+プロジェクトはこれまでに安定版を15回リリースしており、2026年6月にバージョン1.0を、8月にはバージョン1.1を公開した。1.x系では互換性維持の方針を掲げている。AAIFは2025年12月に設立されたLinux Foundation傘下の団体で、AIエージェント向けのオープンな技術・標準の共同開発を支援する。EnvoyのサブプロジェクトからAAIFの独立プロジェクトへ移行することで、他のエージェント関連コミュニティとの結びつきが深まり、共同開発の機会が広がるとされている。
+
+## MCPを取り巻く動向と今後の展望
+
+同発表と合わせて行われたAnthropicのDavid Soria Parra氏の講演によれば、Claude上でのMCPツール呼び出しは10億回を超え、Tier 1 SDKの月間ダウンロード数は約5億回に達している。2026年7月28日版の仕様では、プロトコルの中核をステートレス方式に変更し、リクエストを複数サーバーへ振り分ける大規模運用やキャッシング機構をサポートするようになった。今後の重点領域としては、数分から数週間に及ぶ長期タスクに対応する「MCP Tasks」の強化、企業内MCPサーバーでスキルを一元管理する「Skills over MCP」、エージェントの識別と権限確認を強化する認可・アイデンティティ機能、ツール呼び出し結果形式の整理などが挙げられている。利用範囲は2025年のコーディングエージェント実用化を起点に、2026年は知識労働・科学研究、2027年はOperations領域へと段階的に広がると予測されており、Agent Routerのようなゲートウェイ層の整備はこうしたエージェント活用の拡大を支える基盤技術として位置づけられる。
