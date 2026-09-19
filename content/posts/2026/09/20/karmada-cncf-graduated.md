@@ -1,0 +1,25 @@
+---
+date: "2026-09-20T08:09:51+09:00"
+title: "マルチクラスタKubernetes基盤Karmadaが CNCF Graduatedに、Bloombergやアリババなど本番採用進む"
+description: "マルチクラスタ・マルチクラウド対応のKubernetesオーケストレーションプロジェクトKarmadaがCNCFの最高成熟度「Graduated」に到達し、v1.19ではAIワークロード向けスケジューリング機能も強化された。"
+tags:
+  - Cloud
+references:
+  - "https://www.infoq.com/news/2026/09/karmada-kubernetes-cncf/"
+---
+
+## 概要
+
+マルチクラスタ・マルチクラウド対応のKubernetesオーケストレーションプロジェクト「Karmada（Kubernetes Armadaの略）」が、CNCF（Cloud Native Computing Foundation）における最高成熟度レベルの「Graduated」ステータスに到達したと発表された。発表は中国・上海で開催された「KubeCon + CloudNativeCon + OpenInfra Summit + PyTorch Conference China」の場で行われ、最新版v1.19のリリースと時を同じくしている。CNCFのGraduatedは「広く採用され、本番運用に耐える安定したプロジェクト」に与えられる位置づけで、Karmadaは2021年9月にSandboxへ参加、2023年12月にIncubatingへ昇格し、第三者によるセキュリティ監査、正式なステアリング委員会の設置、CNCF行動規範の採用、CII Best Practices Badgeの取得といった卒業要件を満たして今回の到達に至った。現時点でコントリビューターは292組織から1,214人以上、GitHubスターは5,600を超えており、エコシステムとしての広がりを示している。
+
+## 技術的な特徴とアーキテクチャ
+
+KarmadaはKubernetesの標準APIを置き換えるのではなく、そのまま複数クラスタに拡張する設計を採る点が最大の特徴で、既存のマニフェストやコントローラ、ツール群を変更せずに利用できる。コントロールプレーンはKarmada API Server、Karmada Controller Manager、Karmada Schedulerの3コンポーネントから構成され、内部的にはCluster Controller（メンバークラスタのライフサイクル管理）、Policy Controller（PropagationPolicyオブジェクトの処理）、Binding Controller（クラスタごとのWorkオブジェクト生成）、Execution Controller（メンバークラスタへのマニフェスト適用）という4つのコントローラが伝播処理を担う。主要APIとしては、クラスタアフィニティやリージョン・ゾーン・プロバイダをまたいだ多次元の高可用性、マルチクラスタ分割などのスケジューリング制約を定義する「PropagationPolicy」と、リソーステンプレート自体は変更せずにイメージのプレフィックスやStorageClassなどクラスタ固有の設定を上書きできる「OverridePolicy」がある。今回卒業と同時にリリースされたv1.19では、AIトレーニングジョブ向けのマルチコンポーネントスケジューリングが強化されたほか、優先度ベースのスケジューリング機能がBetaに昇格しデフォルトで有効化されており、リージョンやプロバイダをまたいだ分散GPU/CPUオーケストレーションの課題に対応する。観測性の面ではコントロールプレーンの各コンポーネントからPrometheusメトリクスを出力し、Helmチャートも提供されるなど、既存のCNCFエコシステムのツール群にそのまま組み込める点も特徴である。
+
+## 本番採用の広がりと競合との違い
+
+Bloomberg、Wellhub、Alibaba Cloud、Huawei、Trip.com、Bilibili、iFLYTEK、JDCloud、Kuaishou、RedNote、SenseTime、Vivo、WPS、ZTOなど、多岐にわたる企業がハイブリッドクラウドの容量確保、リージョンをまたいだ耐障害性の確保、AIワークロード向けのGPU/CPUスケジューリング、複数クラスタにまたがる設定の一括配布といった目的でKarmadaを本番導入している。Trip.comの担当者は「既存のKubernetesリソース定義を変更することなく」複数クラスタにまたがる統一的なリソースプール運用を実現し、クラスタ横断の弾力的なスケーリングとフェイルオーバーを可能にしたと述べている。Karmadaは、廃止されたKubeFed(Federation v2)の後継として位置づけられる2つのCNCFプロジェクトの一つで、もう一方のOpen Cluster Management(OCM)がハブ・アンド・スポーク型のエージェントベースでクラスタインベントリやガバナンスに重点を置くのに対し、Karmadaはワークロードの配置と動的スケジューリングに重きを置き、クラスタ横断クエリ向けのキャッシュ層やマルチクラスタサービスディスカバリを備える点で差別化されている。クラスタのライフサイクル管理を担うCluster APIや、Argo CDのApplicationSets、Rancher FleetといったGitOpsツール、Microsoft Azure Kubernetes Fleet Managerの基盤であるKubeFleetなども関連技術として挙げられており、マルチクラスタ運用領域では複数のアプローチが並立している状況がうかがえる。
+
+## 今後の展望
+
+CNCFにおけるGraduatedステータスへの到達は、マルチクラスタ・マルチクラウド運用がKubernetesエコシステムの周辺的なユースケースから、企業の本番基盤における標準的な選択肢の一つへと成熟しつつあることを示している。特にAIワークロードの急増に伴い、複数クラスタにまたがるGPU/CPUリソースの効率的なスケジューリングへの需要は今後も高まると見られ、v1.19で強化された優先度ベースのスケジューリングやマルチコンポーネントスケジューリングは、そうした需要を先取りする形での機能強化と言える。今回の卒業により、KubeFedの後継技術を巡る評価も一段落し、既存の大規模採用企業に加えて、より幅広い業種・規模の組織がマルチクラスタ運用基盤の選定においてKarmadaを有力な候補として検討する動きが進むことが予想される。
