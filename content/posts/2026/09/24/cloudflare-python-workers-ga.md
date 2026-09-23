@@ -1,0 +1,26 @@
+---
+date: "2026-09-24T08:09:47+09:00"
+title: "Cloudflare、Python WorkersをGA化 FastAPIやDjangoがエッジで直接動作"
+description: "CloudflareがPython Workersを正式に一般提供し、Pyodideベースのランタイム上でFastAPIやDjangoなどのフレームワークをJavaScriptと同じエッジ環境で実行できるようになった。"
+tags:
+  - Cloud
+  - Programming Languages
+references:
+  - "https://blog.cloudflare.com/python-workers-ga/"
+---
+
+## 概要
+
+Cloudflareは9月21日、サーバーレスプラットフォームWorkers上でPythonを実行する「Python Workers」を一般提供(GA)段階に進めたと発表した。2年前にベータ機能として導入されて以来、多くの開発者がすでにPython Workers上でアプリケーションを構築してきたが、今回のGA化により、PythonはJavaScriptと並んでCloudflareデベロッパープラットフォームの第一級言語として正式に位置づけられる。FastAPI、Django、FlaskといったWSGI/ASGI対応の主要Webフレームワークを、JavaScriptのグルーコードを書くことなく、そのままエッジランタイム上で直接実行できるようになった点が最大のポイントだ。
+
+## 技術的な仕組み
+
+Python WorkersはWebAssembly(Wasm)を基盤としており、Cloudflareは2018年からWasmをサポートしてきた実績を土台に、Pyodide(PythonインタプリタをWasmにコンパイルしたプロジェクト)を用いてPythonコードをエッジ上で実行している。さらにCloudflareは、この仕組みを標準化する提案として「PEP 783」を通じて「PyEmscripten」プラットフォームの策定にも関与しており、単なる自社実装にとどまらずPythonエコシステム全体への貢献を図っている。データベース接続についてはカスタムのsocket syscall実装によりTCPソケットを扱えるようにし、PostgreSQLやMySQLの標準的なドライバもそのまま利用可能にした。
+
+## 開発者への影響
+
+今回のGA化で特に強化されたのが、Workers AI、R2、D1、Hyperdrive、Durable Objects、Queues、Workflowsといった既存のCloudflareサービスとのネイティブ統合だ。型変換の仕組みをランタイムとPython SDKの両方に統合したことで、たとえばキューへのメッセージ送信は`self.env.QUEUE.send({"key": "value"})`のようにPythonのデータ型をそのまま渡すだけで済むようになり、これまで必要だった複雑なJavaScript相互運用コードを書く必要がなくなった。OpenAIやLangChainなど主要なAI関連ライブラリにも対応しており、Pythonの豊富なエコシステムに慣れた開発者が、使い慣れたパターンとライブラリを活かしながらグローバルに自動スケーリングするアプリケーションをそのまま構築できる点が実務上の大きなメリットとなる。
+
+## 制限事項と今後の展望
+
+一方で、ネイティブにC/C++/Rustなどの拡張モジュールを含むパッケージについては、Wasm対応が別途必要であり、パッケージエコシステム全体としてはまだ移行途上にある点には留意が必要だ。Cloudflareは今後、パフォーマンスとメモリ効率のさらなる向上、対応パッケージの拡充、そして開発者フィードバックに基づく継続的な改善を進める方針を示しており、PyEmscriptenエコシステムの普及を後押ししていく構えだ。JavaScript以外の言語でサーバーレスエッジ開発を行いたいPython開発者にとって、今回のGA化は本番導入の判断材料となる重要な節目と言えるだろう。
