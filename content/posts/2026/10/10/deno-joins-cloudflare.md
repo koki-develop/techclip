@@ -1,0 +1,24 @@
+---
+date: "2026-10-10T18:13:41+09:00"
+title: "DenoチームがCloudflareに合流、独自ランタイムとDeno Deployは開発終了へ"
+description: "Node.js作者Ryan Dahl氏率いるDenoチームがCloudflareに参加し、スタンドアロンのDenoランタイムは1年、Deno Deployは6カ月でそれぞれ開発・サービスを終了することが発表された。"
+tags:
+  - OSS
+  - Programming Languages
+  - Cloud
+references:
+  - "https://blog.cloudflare.com/deno-joins-cloudflare/"
+  - "https://deno.com/blog/cloudflare"
+---
+
+## 概要
+
+Node.jsの作者であるRyan Dahl氏が創業したDenoの開発チーム全員がCloudflareに参加することが発表された。CloudflareとDeno双方のブログで同時に公開されたこの発表によると、DenoチームはCloudflareのWorkersおよびDurable Objectsチームと合流し、分散アプリケーションのための統合プラットフォームの構築に取り組む。これに伴い、スタンドアロンのDenoランタイムは今後1年間、月次のバグ修正とセキュリティ更新のみを提供したのち公式開発を終了する。Deno Deployも、有料ユーザーをCloudflare Workersへ移行させるための6カ月の移行支援期間を経てサービスを終了する。両社は今回の統合を、スケーリングや永続状態の管理といった複雑性をインフラ側ではなくプログラミングモデル自体に組み込むための取り組みと位置づけている。
+
+## 今後のスケジュールと各プロダクトの扱い
+
+発表によれば、Denoランタイムは1年間のサポート期間後にオープンソースプロジェクトとして存続するものの、公式の開発体制は解消される。Deno Deployは6カ月以内にシャットダウンされ、既存の有料顧客にはCloudflare Workersへの移行サポートが提供される。一方、JavaScriptのパッケージレジストリであるJSRは運用を継続し、そのインフラは段階的にCloudflareの基盤へ移行される予定だ。DenoランタイムのV8バインディングであるrusty_v8も継続的にサポートされ、Cloudflareのオープンソースランタイムであるworkerdへの統合が進められる。技術面では、Ryan Dahl氏と共同創業者のBert Belder氏が、8月にリリースした分散実行基盤「celld」とworkerdの統合を主導し、Cloudflare WorkersとDurable Objectsのプログラミングモデルを自己ホスト環境でも利用可能にすることを目指すという。
+
+## 背景と今後の展望
+
+今回の統合の背景には、Denoがベンチャー資金を使い切り、次の資金調達ラウンドへの明確な道筋を描けていなかった事情があるとみられている。celldの8月のリリース時点で、業界内では事実上の買収シグナルと受け止める見方もあった。コミュニティの反応は賛否が分かれており、好意的な意見は一部にとどまる一方、今回の統合を「チームとcelldの技術を獲得するための実質的なアクハイア(acquihire)」と捉える批判的な声も目立つ。特に、独立したJavaScriptランタイムとしてNode.jsのみが残る形になることへの懸念も広がっている。本番環境でDenoを利用している開発者は、1年間のサポート期間内に移行計画を策定する必要があり、Deno依存のプロジェクトの中には代替ランタイムへの移行を検討するものも出てくるとみられる。Cloudflareにとっては、Durable Objectsが備える低コストの実行基盤や永続状態管理、WebSocket対応、高水準のJavaScriptインタフェースといった特性を、AI時代のエージェント実装向けの基盤として強化する狙いがあるとみられ、今後のWorkersプラットフォームの進化を左右する動きとして注目される。
