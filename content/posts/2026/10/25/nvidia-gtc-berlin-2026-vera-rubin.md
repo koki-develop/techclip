@@ -1,0 +1,31 @@
+---
+date: "2026-10-25T08:09:48+09:00"
+title: "NVIDIAがGTC Berlin 2026でVera Rubin基盤のAIファクトリー群を発表、Google CloudはA5Xインスタンスで即応"
+description: "NVIDIAがGTC Berlin 2026でDSX PODやDGX Spark/Stationなど次世代Vera Rubin基盤を発表し、Google CloudはこれをベースにしたA5XインスタンスとVirgo Networkを11月提供開始すると明らかにした。"
+tags:
+  - AI
+  - Cloud
+references:
+  - "https://blogs.nvidia.com/blog/gtc-berlin-2026-keynote/"
+  - "https://cloud.google.com/blog/topics/ai-infrastructure/google-cloud-infrastructure-at-nvidia-gtc-berlin-2026"
+---
+
+## 概要
+
+NVIDIAは10月20〜22日にドイツ・ベルリンで開催した「GTC Berlin 2026」で、Jensen Huang CEOの基調講演を通じて次世代プラットフォーム「Vera Rubin」を軸とする一連の発表を行った。Vera RubinはLLMの処理だけでなく、AIエージェント全体を扱えるよう設計された本格的な量産フェーズの基盤であり、これを収めたモジュール型AIファクトリーのリファレンスデザイン「DSX POD」も同時に披露された。DSX PODは現地でのユーティリティ整備後、わずか14日でデータセンターを稼働できるとされ、従来の6か月から大幅に短縮される。水冷消費量は最大100%削減、同じAI出力を最大30%少ない電力で実現できるとされ、効率性を強調する内容となった。これに合わせてGoogle Cloudは、Vera Rubin NVL72プラットフォームを採用したベアメタルGPUインスタンス「A5X」と、それを支える新ネットワークファブリック「Virgo Network」を発表し、11月の一般提供開始を明らかにした。両社の発表は、AIエージェントを大規模に運用するための計算基盤競争が次の段階に入ったことを示している。
+
+## NVIDIAのAIファクトリー戦略とロボティクス
+
+Huangは基調講演で、AIを「エネルギー、先進コンピュータ、トークンを生成するAIファクトリー、デジタルインテリジェンスモデル、アプリケーション統合」の5層構造として説明し、「AIモデルが登場するはるか前に、インフラが存在していなければならない」と述べた。この文脈で発表されたエージェント実行環境「OpenShell」は、カーネルレベルのサンドボックスを備えたオープンソースのポリシー制御ランタイムで、エージェントが起動されるたびに異なる権限が動的に割り当てられる仕組みを持つ。また、企業データとエージェントを接続する「Agent Knowledge Foundation」や、文書解析・リランキング向けのNemotronツール、構造化データ予測向けの新Kumoモデルも紹介された。
+
+ロボティクス分野では、Isaac GR00Tプラットフォームを基盤とする31自由度の人型ロボット向けリファレンス「Agile ONE SN」が来年の提供を予定していると発表され、Agility Robotics、Figure、KUKA、NEURA Roboticsといった企業がパートナーに名を連ねた。自動車分野では、Hyperionコンピューティングプラットフォームの採用がLucid、Mercedes-Benz、Volkswagen Commercial Vehicles、Einrideに広がり、Volvo CarsはHyperionとAlpamayo Stackを組み合わせて採用する。さらにSiemens Healthineersとの協業によるAI適応放射線治療や、T-MobileとNokiaによる8年間の開発を経た初の商用通話など、業界をまたいだ応用例も示された。個人向けには1ペタフロップス・128GBメモリを備えたRTX Spark搭載AIノートPCも披露され、2016年のDGX-1が2人で運ぶ必要があったのに対し、手持ちサイズまで小型化が進んだことを対比的に示した。
+
+## Google CloudのA5XとVirgo Network、EMEA向けソブリンAI対応
+
+Google Cloudは、Vera Rubin NVL72を採用したベアメタルGPUインスタンス「A5X」を発表し、11月の一般提供開始とEMEA向けデータレジデンシー対応を明らかにした。A5Xは単一拠点クラスターで最大8万基、複数拠点展開では最大96万基のRubin GPUまでスケールできるとされる。これを支える新ネットワーク「Virgo Network」はノンブロッキングなメッシュ型トポロジーを採用し、建物内・建物間をまたぐ水平スケーリングを可能にする。ストレージ面では、GPUDirect Storageに対応したGoogle Cloud Managed Lustreにより、CPUやシステムメモリを経由せずGPUメモリへ直接RDMA転送できるほか、長文コンテキスト向けのKVキャッシングでGPUのHBM容量を超えるコンテキストメモリ管理を実現し、推論の初回トークン生成時間短縮とスループット改善につながるとしている。オーケストレーション面では、GKEのRDMA管理機能「Managed DRANET」やトポロジー認識スケジューラ「Kueue」の強化も合わせて発表された。WPPのCTOであるStephan Pretoriusは「エージェント型AIの真の価値はスピードだけでなく、現代の制作パイプラインの摩擦から人間の創造性を解放することにある」と述べ、A5X導入によりブランドアセットの品質チェックや調整をエージェントに任せられるようになったとコメントした。
+
+ソブリンAI対応としては、オンプレミス向けのGoogle Distributed Cloud(GDC)でNVIDIA Blackwell Ultra世代のHGX B300システムが一般提供となり、エアギャップ環境でもGemini 3.5 Flashのマルチモーダル機能や、インデックス・埋め込み・対話をすべて主権境界内に保つエンタープライズ検索(プレビュー)が利用可能になる。パブリッククラウド側ではGoogle Cloud Data Boundaryによるリージョンデータレジデンシー制御や、フランスのS3NS、ドイツのThalesといった地域パートナーと連携するGoogle Cloud Dedicatedも提供される。機密computing関連では、RTX PRO 6000 Blackwell Server Edition搭載のG4インスタンスが一般提供となり、新たにGB300 NVL72とNVIDIA Confidential Bare Metalを組み合わせたA4X Maxインスタンスも発表され、推論・学習中のプロンプトやモデルを保護するハードウェアルートの secure boot・暗号化インターコネクトを備える。オープンモデルについても、Gemma、Mistral、NVIDIA Nemotronがソブリンクラウドでの重み・ランタイムの完全管理に対応し、ベンダーロックインを回避できる形で統合された。
+
+## 展望
+
+NVIDIAとGoogle Cloudの発表は、AIエージェントの本格運用に向けたインフラ投資が、単一のGPU世代の性能競争から、電力効率・展開スピード・ネットワーク構成・データ主権までを含む総合的なAIファクトリー設計の競争へと移行していることを示している。Huangが欧州のテクノロジー生態系に約100億ドルの投資を表明し、1万2000以上のパートナーを抱えると述べた点や、Google CloudがEMEA向けのデータレジデンシーと主権対応を前面に押し出した点は、地政学的な要請に応じたAI基盤のローカライズが今後の普及における重要な論点になることを示唆している。A5Xの一般提供は来月に予定されており、Vera Rubin基盤を採用する他クラウド事業者の対応状況にも注目が集まる。
