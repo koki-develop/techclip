@@ -1,0 +1,28 @@
+---
+date: "2026-11-07T08:06:55+09:00"
+title: "Google、Kubernetes基盤のAI開発環境「GKE Workspaces」を発表、GPU/TPU付きノートブックを数分で起動"
+description: "GoogleがオープンソースのKubeflow Workspacesをベースに、GKE上でIDEとアクセラレータを選んで即座にコーディング環境を立ち上げられる「GKE Workspaces」を発表した。"
+tags:
+  - Cloud
+  - AI
+references:
+  - "https://opensource.googleblog.com/2026/11/gke-workspaces-notebooks-on-google-ai-infrastructure.html"
+---
+
+## 概要
+
+Googleは11月4日、Google Kubernetes Engine(GKE)上で動作するセルフホスト型のAI/ML開発プラットフォーム「GKE Workspaces」を発表した。開発者はJupyterLabまたはブラウザ内VS Codeのいずれかのインターフェースと、CPU・GPU・Cloud TPUといったアクセラレータを選ぶだけで、Google Cloud Consoleへのアクセスやコマンドライン操作なしに、Webダッシュボードから数分でコーディング環境を起動できる。対象として想定されているのは、Kubernetesインフラの管理知識を持たないML実践者や研究者だ。
+
+GKE Workspacesはオープンソースの「Kubeflow Workspaces」プロジェクトをベースにしており、両者ともApache 2.0ライセンスで公開されている。GoogleはKubeflowコミュニティと協力し、GKE向けに開発した拡張機能を上流プロジェクトへマージしていく方針を示している。
+
+## 技術的な詳細
+
+GKE Workspacesの中核機能の一つが、Pod Snapshotsを活用したステートフルな一時停止・再開機能だ。GPUメモリ上の変数やロード済みモデルの状態を保持したままワークスペースを一時停止でき、再開時には作業を中断した状態から継続できる。これにより、高価なアクセラレータを使用しない時間帯のコストを抑えつつ、再起動のたびに環境を再構築する手間を省ける。
+
+TPUの扱いも簡素化されており、JAXおよびPyTorchを用いて単一チップから複数ホストにまたがるTPUスライスまで、同じワークフローでスケールさせることができる。またCPUのみのノートブックからSparkやRay、マルチホストトレーニングといった分散処理ジョブを制御する統合も用意されている。さらに、Identity-Aware Proxy経由のHTTPS接続によってローカルのAIコーディングエージェントをクラウドアクセラレータに接続できるほか、Agent Substrateなどを用いた軽量な隔離サンドボックス内で複数のコーディングサブエージェントを並列実行することも可能だという。
+
+アーキテクチャ面では、Kubeflow Workspacesの汎用実装に対し、GKE Workspacesは「Istio依存のないスタンドアロンデプロイメント」を採用している点が異なる。各ワークスペースには専用の暗号化Persistent Diskが割り当てられてファイルが分離され、リモートアクセスはGoogle Identity-Aware Proxyを介したHTTPSで保護される。運用体制としては、プラットフォームチーム(管理者)が事前に承認済みのイメージとハードウェアの選択肢を設定し、リソース容量とコストを管理する一方、エンドユーザーはその範囲内から選んでセルフサービスで環境を立ち上げる形を取る。
+
+## 今後の展望
+
+Googleは記事内で、Kubeflowコミュニティと連携してGKE向けに開発した機能を上流プロジェクトへ統合していく考えを明らかにしている。企業がAIモデル開発基盤をKubernetes上に標準化する動きが進む中、Kubernetesの専門知識を持たないデータサイエンティストやMLエンジニアにも扱いやすい形でGPU/TPUリソースへのアクセスを提供する点は、クラウドベンダー間の開発者体験競争における一つの焦点になりそうだ。
