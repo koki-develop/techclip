@@ -1,7 +1,7 @@
-# Salesforce、AI音声エージェントのCrestaを約27億ドルで買収へ正式契約
-Tags: Other, AI
+# Salesforce、コンタクトセンター向け音声AIエージェント企業Crestaを約27億ドルで買収
+Tags: AI, Other
 
-- Salesforce Signs Definitive Agreement to Acquire Cresta (2026-11-03)
+- Salesforce Signs Definitive Agreement to Acquire Cresta (2026-11-02)
   https://www.salesforce.com/news/stories/salesforce-signs-definitive-agreement-to-acquire-cresta/
 
-Salesforceは、AI音声エージェントとリアルタイム対話インテリジェンスを提供するCrestaの買収で正式契約を締結したと発表した。買収総額は約27億ドルとされ、Service CloudおよびAgentforceとの統合を図ることで、コンタクトセンター向けAI機能のさらなる強化を目指す。
+Salesforceはコンタクトセンター向けの音声AIエージェント技術を持つCrestaを約27億ドルで買収することに合意したと発表した。Crestaのリアルタイム音声AI技術をService Cloudに統合することで、カスタマーサービス領域におけるAIエージェント機能を強化する狙いがある。AIエージェント企業の買収が相次ぐ中、顧客対応分野でも大型のM&Aが続いている。
