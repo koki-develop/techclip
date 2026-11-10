@@ -1,0 +1,25 @@
+---
+date: "2026-11-10T18:09:28+09:00"
+title: "Ghosttyのコアを汎用Cライブラリ化した「Libghostty 1.0」が正式リリース、JetBrainsやNeovimが採用"
+description: "HashiCorp共同創業者ミッチェル・ハシモト氏が主導するターミナルエミュレータ「Ghostty」のコア機能を切り出したCライブラリ「Libghostty 1.0」が正式リリースされ、JetBrains IDEsやNeovimなどで採用が進んでいる。"
+tags:
+  - OSS
+references:
+  - "https://www.publickey1.jp/blog/26/libghostty_10windowsrex.html"
+---
+
+## 概要
+
+HashiCorp共同創業者のミッチェル・ハシモト氏が主導する高性能ターミナルエミュレータ「Ghostty」のコア機能を、C言語による汎用ライブラリとして切り出した「Libghostty 1.0」が正式リリースされた。macOS、Linux、Windows、FreeBSD、Android、iOS、WebAssemblyという広範なプラットフォームに対応しており、ターミナル処理を自前で実装する従来の定番ライブラリ「libvterm」の代替として位置付けられている。すでにJetBrains IDEsやNeovim、KDEなど主要な開発ツールでの採用が進んでおり、ターミナルエミュレーション基盤としての存在感を急速に高めている。
+
+## 技術的な特徴と対応プラットフォーム
+
+LibghosttyはGhostty本体を支える高速なターミナルエミュレーション処理をそのまま再利用できる形でライブラリ化したもので、開発者は自前でVT100系のエスケープシーケンス処理やレンダリングロジックを実装せずに、Ghostty同等の高性能なターミナル機能をアプリケーションに組み込める。Neovimではこれまで使われてきたlibvtermに代わってLibghosttyが採用された。対応プラットフォームはmacOS、Linux、Windows、FreeBSD、Android、iOS、WebAssemblyと幅広く、Ghostty本体がWindowsを公式サポートしていないのに対し、Libghosttyを介したサードパーティ実装によるWindows対応が推奨される形になっている点も特徴的だ。
+
+## 採用が進む開発ツール群
+
+リリース時点で複数の主要プロジェクトがLibghosttyの採用を表明・実施している。JetBrains IDEsは正式に採用を決定し、Neovimは内蔵ターミナルバックエンドとしてLibghosttyを統合した。KDEではLibghosttyを基盤とする新規プロジェクト「Kwi」の開発が進行中で、さらにVercelのモノレポビルドツール「Turborepo」も仮想ターミナル出力のレンダリングにLibghosttyを採用している。エディタ、デスクトップ環境、ビルドツールといった異なる領域のプロジェクトで横断的に採用が進んでいることは、Libghosttyが単なるGhosttyの副産物ではなく、ターミナル処理の共通基盤としての地位を確立しつつあることを示している。
+
+## Windows向けマルチプレクサ「Rex」の展望
+
+ハシモト氏が2026年8月に設立した新会社「Superlogical」は、Libghosttyを基盤としたターミナルマルチプレクサ「Rex」を開発しており、そのWindows版が数週間以内にアルファ版としてリリースされる予定だ。Ghostty本体がWindows非対応である中、Rexを通じてWindows環境でも同等のターミナル体験を提供しようとする動きであり、Libghosttyのクロスプラットフォーム対応がこうした派生プロジェクトを後押ししている。tmuxやScreenに代わる選択肢として、今後Rexやその他のLibghostty採用プロジェクトがWindows環境のターミナル運用をどう変えていくか注目される。
