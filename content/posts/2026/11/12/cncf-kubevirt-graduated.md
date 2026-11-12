@@ -1,0 +1,26 @@
+---
+date: "2026-11-12T18:09:40+09:00"
+title: "KubernetesでVMを運用するKubeVirt、CNCFの最高成熟度「Graduated」に到達"
+description: "Red Hat発のオープンソースプロジェクトKubeVirtが、Kubernetes上でVMとコンテナを統合管理する技術として開発開始から10年を経てCNCF Graduatedステータスを獲得した。"
+tags:
+  - Cloud
+  - OSS
+references:
+  - "https://www.cncf.io/announcements/2026/11/10/cloud-native-computing-foundation-announces-kubevirt-graduation/"
+---
+
+## 概要
+
+Cloud Native Computing Foundation(CNCF)は11月10日、KubeCon + CloudNativeCon North Americaにおいて、Kubernetesクラスタ上で仮想マシン(VM)を運用するオープンソースプロジェクト「KubeVirt」をプロジェクト成熟度の最高段階である「Graduated」に認定したと発表した。KubeVirtはRed Hatが2016年に創設し、VMとコンテナの運用基盤を統一することを目指すプロジェクトで、2019年9月にCNCF Sandboxへ受け入れられ、2022年4月にIncubatingへ移行してから約4年半でGraduatedに到達した。Graduatedは本番運用に適した安定性と広範な採用を達成したプロジェクトに与えられる最高位のステータスで、第三者によるセキュリティ監査の完了、透明なガバナンスを担保する正式なステアリング委員会の設立、CNCF行動規範の採択といった基準を満たす必要がある。
+
+## 技術的な仕組みと採用状況
+
+KubeVirtはカスタムリソースとコントローラを通じて既存のKubernetesクラスタにVM管理機能を統合し、コンテナと同一の宣言型APIでVMの作成・スケジューリング・管理を行えるようにする。これにより、レガシーなVMワークロードを含むアプリケーション全体を書き換えることなく、段階的なモダナイゼーションを実現できる点が特徴だ。直近のv1.8リリースでは、仮想化スタックを抽象化する「Hypervisor Abstraction Layer」、機密VM向けのIntel TDX対応、ストレージに依存しない増分バックアップ、AI/HPCワークロード向けのネイティブ速度パフォーマンスといった機能が追加されている。
+
+コミュニティ規模も拡大しており、現在2,088人のコントリビューターが520組織から参加し、GitHub上のスター数は7,100に達する。本番環境での採用企業としてはByteDance、Cloudflare、CoreWeave、NVIDIAなどが挙げられ、通信事業者のSwisscomは390クラスタ・2,100ワーカーノード・160TBの永続ストレージ規模でKubeVirtを運用しているという。2025年の業界調査では、Kubernetes利用者の86%がKubeVirtを認知し、26%が本番環境で利用していると報告されている。
+
+## 関係者のコメントと今後の展望
+
+CNCFのCTOであるChris Aniszczyk氏は、組織がAIとクラウドネイティブインフラをスケールする上で、VMとコンテナを単一のプラットフォーム下で実行できることが運用効率と成功に不可欠だと述べた。KubeVirtの創設者兼メンテナーであるFabian Deutsch氏は、プロジェクトが初期ビジョンから、グローバル企業で数千の本番VMを支える信頼性の高いエンタープライズエンジンへと進化し、単一プラットフォーム上でレガシーシステムとモダナイゼーションの両立が可能であることを証明したと振り返った。NVIDIAのRyan Hallisey氏も、KubeVirtの卒業をオープンソースAIにとっての大きなマイルストーンと評し、エンタープライズでのAI採用にはクラウドネイティブインフラ上で機械学習ワークフロー全体を標準化することが本質的だと指摘している。
+
+今後のロードマップでは、GPUの動的リソース割り当て(DRA)がv1.9でベータ版となる予定で、SR-IOVやホストデバイス、CPU割り当てへの対応拡大も見込まれている。機密VM分野ではAMD SEV/SEV-SNPのベータ対応、IBM Secure ExecutionのGA、Intel TDXのアルファ対応に加え、Arm CCAの開発も進行中だ。さらにv1.9ではコア機能外の拡張を可能にする構造化プラグイン機構がアルファ版として導入され、KVM以外の仮想化スタック(Cloud Hypervisor、OpenVMM、Firecracker)をプラグイン形式で利用できるフレームワークの構築も進められている。KubeVirtはPrometheusによる監視、ArgoによるGitOps管理、Istioによるサービスメッシュ、Veleroによるバックアップなど、他のCNCFプロジェクトとの連携も強化しており、クラウドネイティブ基盤の中核としての位置づけを一層強めていく方針だ。
