@@ -1,6 +1,6 @@
 ---
 date: "2026-10-30T08:08:49+09:00"
-title: "Anthropic、ペンタゴンの"ブラックリスト"下でも米政府向けClaude契約を州・地方・部族政府に拡大"
+title: "Anthropic、ペンタゴンの「ブラックリスト」下でも米政府向けClaude契約を州・地方・部族政府に拡大"
 description: "Anthropicが米連邦調達局(GSA)との契約を拡大し、Claude Enterprise・Claude for Government・Claude APIを州・地方・部族・準州政府にも40%割引で提供すると発表した。"
 tags:
   - AI

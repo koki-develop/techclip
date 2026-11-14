@@ -28,7 +28,7 @@ A topic file path (`./topics/<yyyy>/<mm>/<dd>/<slug>.md`) and an ISO 8601 dateti
    - Use h2 subheadings, at least 2 sections, chosen to fit the topic. Never h1 — the frontmatter title fills that role.
    - It should read like a well-written tech news brief, not a concatenation of article excerpts.
 
-   Also write a `title` — not the topic headline reused, but a headline reflecting the summary you actually wrote — and a one-sentence `description`. Both in Japanese.
+   Also write a `title` — not the topic headline reused, but a headline reflecting the summary you actually wrote — and a one-sentence `description`. Both in Japanese. They are double-quoted YAML strings, so never put a `"` inside them; quote words with 「」 instead.
 
 4. **Save** to `./content/posts/[YYYY]/[MM]/[DD]/[SLUG].md` with the slug from the topic file path, creating directories as needed and overwriting any existing file:
 
