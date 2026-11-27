@@ -1,0 +1,25 @@
+---
+date: "2026-11-27T18:09:24+09:00"
+title: "macOSのXNUカーネルをLinuxカーネルモジュール化、OSS「xnulinux」がSafariやFinderの実行を実現"
+description: "macOSのオープンソースカーネルXNUをLinuxカーネルモジュールとして動かし、SafariやFinderなどmacOS GUIアプリをLinux上で実行可能にするOSSプロジェクト「xnulinux」が公開された。"
+tags:
+  - OSS
+references:
+  - "https://gigazine.net/gsc_news/en/20261126-xnu-linux/"
+---
+
+## 概要
+
+macOSの核心部分であるオープンソースカーネル「XNU」を、Linuxカーネルモジュール(xnu.ko)として組み込み、Linux上でmacOSのGUIユーザースペース全体を再現するプロジェクト「xnulinux」が公開された。SafariやFinder、Dock、WindowServer、ログインウィンドウといったmacOS標準のコンポーネントがLinux環境上でそのまま動作することが示されており、2つの異なるOSカーネルの境界を越えるという野心的な試みとして注目を集めている。
+
+## 技術的な仕組み
+
+xnulinuxの中核は、ホストのLinuxカーネルとXNUの間を仲介する軽量なインターフェースモジュール「Foreign Kernel Interface(fki.ko)」だ。このモジュールを介して、XNU側はホストLinuxが持つCPU、メモリ、ファイル、ネットワーク、GPUといったリソースにアクセスする。具体的には、ホストの各CPUはLinuxカーネルスレッドとして扱われ、メモリ管理についてはXNUがLinuxのCMA(Contiguous Memory Allocator)から連続した領域を割り当て、それをXNU独自のpmapで管理する仕組みになっている。GPU統合ではmacOSのMetal APIの呼び出しをVulkan経由でLinuxホストのGPUに渡し、DRMブリッジを通じて接続する。対応するGPUがない場合はCPUによるソフトウェア描画にフォールバックするなど、異なるグラフィックスタックをまたぐ変換レイヤーが用意されている点が技術的な見どころだ。
+
+## 動作実績と制約
+
+動作確認済みの環境として、Apple Silicon Mac上で動くarm64 Linux VM、およびNVIDIA DGX Spark上のベアメタルarm64 Linuxの2パターンが挙げられている。これらの環境でデスクトップの起動からログインウィンドウ、WindowServer、Dock、Finder、さらにはSafariやChromeといったアプリケーションまで機能することが示された。一方で、プロジェクトのリポジトリ自体にはAppleの著作物であるmacOSシステムディスクやカーネル拡張機能は含まれておらず、利用にはAppleの公式インストーラーやIPSWファイルから別途これらを取得する必要がある。ライセンス上の線引きを意識した構成になっており、XNU自体がAppleがApple Public Source License(APSL)で公開しているオープンソースコンポーネントであることを踏まえた設計と言える。
+
+## 今後の注目点
+
+XNUとLinuxという設計思想の異なる2つのカーネルを1台のマシン上で協調動作させる試みは、仮想化やコンテナ技術とは一線を画すアプローチであり、カーネル間リソース共有の技術的な検証例として今後の発展が注目される。GPU統合やメモリ管理など複雑な互換レイヤーを要する部分が多いため、安定性や対応アプリの範囲がどこまで広がるかが今後の焦点になりそうだ。
